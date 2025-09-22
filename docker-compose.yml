@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+ # Serviço da aplicação Django
+  web:
+    build: .
+    container_name: django_app
+    command: ["/app/wait-for-db.sh", "db", "gunicorn", "project.wsgi:application", "--bind", "0.0.0.0:8000"]
+
+    volumes:
+      - .:/app  # Mapeia o código local para dentro do contêiner (ótimo para desenvolvimento)
+    ports:
+      - "8000:8000" # Mapeia a porta 8000 do contêiner para a 8000 da sua máquina
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+    depends_on:
+      - db # Garante que o contêiner do DB suba antes da aplicação
+
+  # Serviço do Banco de Dados MySQL
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    volumes:
+      - mysql_data:/var/lib/mysql # Volume para persistir os dados do banco
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} # Senha de root do MySQL
+    ports:
+      - "3306:3306" # Expor a porta do MySQL para sua máquina (útil para debugar com DBeaver, etc)
+
+# Volumes nomeados para persistência de dados
+volumes:
+  mysql_data:

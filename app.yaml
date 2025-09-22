@@ -1,0 +1,22 @@
+name: projetointegrador1
+services:
+  - name: web
+    github:
+      repo: iaramariano/projetointegrador1
+      branch: deploy_teste
+      deploy_on_push: true
+    run_command: gunicorn project.wsgi:application --worker-tmp-dir /dev/shm
+    source_dir: projetointegrador1-deploy_teste
+    envs:
+      - key: DJANGO_SETTINGS_MODULE
+        value: project.settings
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: PORT
+        value: "8080"
+    http_port: 8080
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    routes:
+      - path: /
+    environment_slug: python
