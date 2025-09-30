@@ -1,0 +1,70 @@
+{% extends "global/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+    <div class="row text-center mt-3">  
+        <div class="col-sm-8 offset-md-2">
+            {% if request.user.is_authenticated%}
+                <h2 class="text-center mt-3">CÃES REGISTRADOS</h2>
+            {% else %}
+                <h2 class="text-center mt-3">CÃES PARA ADOÇÃO</h2>
+            {% endif %}
+        </div>
+
+        <div class="col-sm-2 text-end">
+            <button type="button" class="btn" data-bs-toggle="offcanvas" data-bs-target="#searchBackdrop" aria-controls="searchBackdrop" data-bs-backdrop="static" aria-controls="searchBackdrop">
+                <i class="fas fa-magnifying-glass fa-2x mb-2" style="color: #533E1A;"></i>
+            </button>
+        </div>
+    </div>
+    
+    {% include "pets/partials/petcard_holder.html" %}
+
+    
+    {% if request.user.is_authenticated %}    
+    
+        {% if num_results > 0 %}
+            <div class="row mt-3">
+                <span id="num_results_id" class="form-title">Exibindo  {{ num_results }}{% if num_results > 1 %} cães cadastrados {% else %} cão cadastrado{% endif %}</span>
+            </div>
+        {% else %}
+            <div class="row mt-3">
+                <span id="num_results_id" class="form-title">Não há cães para exibir</span>
+            </div>
+        {% endif %}
+        
+        <div class="row text-center mt-3">
+            <div>
+                <a href={% url 'pet:panel' %} role="button" class="btn btn-primary ms-3 me-3 mb-3 mt-3 btn-login" id="btn_voltar">VOLTAR</a>
+            </div>
+        </div>
+    
+    {% else %}
+    
+        {% if num_results > 0 %}
+            <div class="row mt-3">
+                <span id="num_results_id" class="form-title">Exibindo  {{ num_results }}{% if num_results > 1 %} cães para adoção {% else %} cão para adoção{% endif %}</span>
+            </div>
+        {% else %}
+            <div class="row mt-3">
+                <span id="num_results_id" class="form-title">Não há cães para adoção para exibir.</span>
+            </div>
+        {% endif %}
+
+        <div class="row text-center mt-3">
+            <div>
+                <a href={% url 'pet:petlist' %} role="button" class="btn btn-primary ms-3 me-3 mb-3 mt-3 btn-login" id="btn_voltar">DESFAZER FILTRO</a>
+            </div>
+        </div>
+
+    {% endif %}
+            
+    {% include 'pets/partials/search_offcanvas.html' %}
+
+{% endblock content %}
+
+{% block scripts %}
+    <script src= "{% static 'pets/js/search.js' %}"></script>
+{% endblock %}

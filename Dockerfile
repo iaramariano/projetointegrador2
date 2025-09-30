@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     pkg-config \
     default-libmysqlclient-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # 3. Definir variáveis de ambiente
@@ -29,4 +30,4 @@ COPY . /app/
 EXPOSE 8000
 
 # 8. Comando para rodar a aplicação (usando Gunicorn para produção)
-CMD ["gunicorn", "project.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["/app/start.sh"]
