@@ -1,0 +1,75 @@
+{% comment " " %} chama a funcao header para page home {% endcomment %}
+
+{% load static %}
+
+{% include "pets/partials/head.html" %}
+
+{% include "pets/partials/header_home.html" %}
+
+{% include "pets/partials/message_toast.html" %}
+
+<body class="bg-light-caramel" {% if search %} data-open-target="searchBackdrop" {% endif %}>
+    
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+
+    <div class="spacing-row"></div>
+
+    <div class="container col-12 shadow">
+        {% include "pets/partials/about_block.html" %}
+    </div>
+
+    <div class="container col-12 shadow">
+        {% include "pets/partials/support_block.html" %}
+    </div>
+
+    <div class="container col-12 shadow">
+        {% include "pets/partials/follow_block.html" %}
+    </div>
+
+    <separator class="my-4"></separator>
+
+    <div class="col-12 my-5 text-center">
+        <a href="http://127.0.0.1:8000/area-logada"
+        class="btn btn-lg fw-bold px-4 py-2"
+        style="--bs-btn-color:#834E27;">
+        Acessar Área Logada
+        </a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+
+    <script>
+        (function(d){
+            var s = d.createElement("script");
+            s.setAttribute("data-account", "eGhjnvptKH");
+            s.setAttribute("data-position", "1");  // 1=Bottom Right (padrão), 2=Bottom Left, 3=Top Right, 4=Top Left
+            s.src="https://cdn.userway.org/widget.js";
+            (d.body||d.head).appendChild(s);
+        })(document)
+    </script>
+
+    {% block scripts %} {% endblock scripts %}
+
+    <a href="https://wa.me/5511970317379?text=Olá!%20Vim%20pelo%20site%20do%20Cãotinho"
+    class="whatsapp-float"
+    target="_blank" rel="noopener noreferrer"
+    style="position:fixed;left:20px;bottom:20px;z-index:1050;">
+    <img src="{% static 'pets/img/whatsapp.png' %}"
+        alt="WhatsApp"
+        class="whatsapp-icon"
+        style="width:60px;height:60px;border-radius:50%;box-shadow:0 4px 10px rgba(0,0,0,.3);">
+    </a>
+
+    </body>
+</html>
