@@ -7,6 +7,7 @@ app_name = "pet"
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('area-logada', views.area_logada, name='area_logada'),
     path('panel', views.panel, name='panel'), #teste da nova página
     path('users', views.users, name='users'),
     
