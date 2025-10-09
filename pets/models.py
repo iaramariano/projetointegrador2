@@ -3,6 +3,8 @@ from django.forms import MultiWidget, TextInput
 from django.contrib.auth.models import User
 from datetime import date, datetime
 
+
+# Cria o modelo de setor para associar aos pets
 class SectorMod(models.Model):
     TYPE = [("I", "Individual"), ("C", "Coletivo")] # Cria as opções de tipo de setor
     id_sector = models.AutoField(primary_key=True)
@@ -11,18 +13,8 @@ class SectorMod(models.Model):
 
     def __str__(self):
         return f"{self.name}"
-        
-class Evento(models.Model):
-    #Cria o evento para o cãozinho (paciente) e preenche se cão está apto ou não para adoção
-    id_evento = models.AutoField(primary_key=True)
-    id_paciente = models.ForeignKey(PetsMod, on_delete=models.CASCADE, related_name='eventos') 
-    evento = models.CharField(max_length=255)
-    dataevento = models.DateField()
-    gera_inaptidao = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f "Evento {self.evento} para o pet{self.id_paciente.name} em {self.datadoevento}"
-    
+            
+# Cria o modelo de pets
 class PetsMod(models.Model):
         
         #Criando as opções de escolha para o sexo, porte e aptidão do animal.
@@ -65,3 +57,14 @@ class PetsMod(models.Model):
         
         def __str__(self):
             return self.name
+
+# Cria o evento para o cãozinho (paciente) e preenche se cão está apto ou não para adoção
+class MedicalEvent(models.Model):
+    id_event = models.AutoField(primary_key=True)
+    id_patient = models.ForeignKey(PetsMod, on_delete=models.CASCADE, related_name='medical_events') 
+    event = models.CharField(max_length=255)
+    event_date = models.DateField(auto_now=False, auto_now_add=False, default=date.today)
+    implies_inaptitude = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Evento {self.event} para o pet {self.id_patient} em {self.event_date}"
