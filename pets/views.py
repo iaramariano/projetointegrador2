@@ -3,11 +3,15 @@ from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from . import views
-from .forms import PetsModForm, SectorModForm
-from .models import PetsMod, SectorMod
-#Suporte contém classes de suporte
-from .support import Dates, BgCardColor
+from .forms import PetsModForm, SectorModForm, MedicalEventForm
+from .models import PetsMod, SectorMod, MedicalEventMod
+
+from .services import create_medical_event, create_medical_event_bulk
+
+# Classes utilitárias
+from .utils import Dates, BgCardColor
+
+from datetime import date
 
 
 #Instância classes de suporte
@@ -108,8 +112,8 @@ def pet_create(request):
         registered_message = form.cleaned_data['name'] + " cadastrad" + gender_vowel + " com sucesso!"
         
         form.save()
-        
         messages.success(request, registered_message)
+    
     else:
         messages.error(request, "Algo deu errado! Por favor, repita a operação de cadastro.")
 
@@ -214,9 +218,9 @@ def sector_create(request):
 
 # Atualiza os dados do setor selecionado e exibe uma mensagem confirmando a atualização.
 @login_required(login_url='authors:login', redirect_field_name='next')    
-def sector_update(request, idsetor):
+def sector_update(request, id_sector):
     
-    sector = get_object_or_404(SectorMod, idsetor=idsetor)
+    sector = get_object_or_404(SectorMod, id_sector=id_sector)
     form = SectorModForm(request.POST or None, instance = sector)
     
     if request.method == 'POST' and form.is_valid():
@@ -234,15 +238,67 @@ def sector_update(request, idsetor):
 
 # Exclui o setor selecionado do banco de dados.
 @login_required(login_url='authors:login', redirect_field_name='next')
-def sector_delete(request, idsetor):
+def sector_delete(request, id_sector):
     
-    sector = get_object_or_404(SectorMod, idsetor=idsetor)
+    sector = get_object_or_404(SectorMod, id_sector=id_sector)
     
     if request.method == 'POST':
         sector.delete()
     
     return redirect('pet:sector_manager')
 #****************************************************************************************************************************************************************
+
+# ***********************************************************VIEWS RELACIONADAS A EVENTOS MÉDICOS****************************************************************
+
+# Registra um evento médico para todos os residentes de um setor.
+@login_required(login_url='authors:login', redirect_field_name='next')
+def register_medical_event_by_sector(request, id_sector, event):
+
+    form = MedicalEventForm(request.POST or None)
+
+    if request.method != 'POST' or not form.is_valid():
+        messages.error(request, "Algo deu errado. Por favor, repita a operação.")
+        return redirect('pet:sector_manager')    
+    
+    if not event or not id_sector:
+        messages.error(request, "Algo deu errado. Por favor, repita a operação.")
+        return redirect('pet:sector_manager')
+    
+
+    event_date = form.cleaned_data.get('event_date') or date.today()
+      
+    sector = get_object_or_404(SectorMod, id_sector=id_sector) #Coleta as informações do setor selecionado.
+    residents = PetsMod.objects.filter(sector=sector.id_sector).order_by('id_pet') # Lista de pacientes do setor selecionado.
+
+    if not residents:
+        messages.error(request, "O setor selecionado não possui residentes.")
+        return redirect('pet:sector_manager')
+    
+    try:
+        create_medical_event_bulk(residents, event, event_date) #Cria os eventos médicos em lote.
+        messages.success(request, f"Evento médico '{event}' registrado para todos os residentes do setor '{sector.name}' com sucesso!")
+
+    except Exception as e:
+        messages.error(request, f"Algo deu errado ao registrar os eventos médicos.")
+
+    return redirect('pet:sector_manager')
+#****************************************************************************************************************************************************************
+# Registra um evento médico para o cão selecionado.
+@login_required(login_url='authors:login', redirect_field_name='next')
+def medical_event_form(request):
+
+    form = MedicalEventForm()
+
+    pets = PetsMod.objects.all().order_by('id_pet') #Lista de cães para o formulário de seleção do paciente.
+
+    context = {'form': form, 'pet_id': pets.id, 'pets': pets.name}
+
+    print(context)
+
+    return redirect('pet:medical_event', context=context)
+#****************************************************************************************************************************************************************
+
+
 
 
 @login_required(login_url='authors:login', redirect_field_name='next')

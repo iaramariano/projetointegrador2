@@ -4,7 +4,6 @@
 
 from datetime import datetime
 from random import randint
-from .models import SectorMod
 
 class Dates: # Cria classes para gerar suporte referente a datas.
     

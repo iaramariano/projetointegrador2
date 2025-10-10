@@ -29,8 +29,12 @@ urlpatterns = [
 
     #Search URLs
     path('search', views.petlist, {'search': True}, name='search'),
-    path('search_respost', views.petlist,{'filter': True}, name='search_respost')
-]
+    path('search_respost', views.petlist,{'filter': True}, name='search_respost'),
+
+    #Medical Event URLs
+    path('medical_event', views.medical_event_form, name='medical_event')
+    
+    ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

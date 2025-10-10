@@ -59,12 +59,12 @@ class PetsMod(models.Model):
             return self.name
 
 # Cria o evento para o cãozinho (paciente) e preenche se cão está apto ou não para adoção
-class MedicalEvent(models.Model):
+class MedicalEventMod(models.Model):
     id_event = models.AutoField(primary_key=True)
-    id_patient = models.ForeignKey(PetsMod, on_delete=models.CASCADE, related_name='medical_events') 
+    patient = models.ForeignKey(PetsMod, on_delete=models.CASCADE, related_name='medical_events') 
     event = models.CharField(max_length=255)
     event_date = models.DateField(auto_now=False, auto_now_add=False, default=date.today)
-    implies_inaptitude = models.BooleanField(default=False)
+    change_status = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Evento {self.event} para o pet {self.id_patient} em {self.event_date}"
