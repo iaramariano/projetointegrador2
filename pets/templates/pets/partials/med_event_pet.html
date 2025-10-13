@@ -1,0 +1,33 @@
+<!-- PRIMEIRA LINHA-->
+<div class="row mt-3 g-3 align-items-center">
+    <label for="{{ form.patient.id_for_label }}" class="form-label register-form-title">CÃO</label>
+    {{ form.patient }}
+</div>
+    
+<div class="spacing-row"></div>
+        
+<!-- SEGUNDA LINHA -->
+<div class="row mt-3 g-3 align-items-center">
+    
+    <label for="{{ form.event_date.id_for_label }}" class="form-label register-form-title">DATA DO EVENTO</label>
+    {{ form.event_date }}
+</div>
+      
+<div class="spacing-row"></div>
+
+<div class="row mt-3 g-3 align-items-center">
+    <label for="{{ form.event.id_for_label }}" class="form-label register-form-title">DESCREVA O EVENTO MÉDICO</label>
+    {{ form.event }}
+</div>
+
+<div class="spacing-row"></div>
+
+<div class="row mt-3 g-3 align-items-center justify-content-center">
+    <div class="=col-auto">
+        <label for="{{ form.change_status.id_for_label }}" class="form-label register-form-title mb-0">ALTERA STATUS</label>
+    </div>
+    <div class="col-auto">
+        {{ form.change_status }}
+    </div>
+</div> 
+<div class="spacing-row"></div>

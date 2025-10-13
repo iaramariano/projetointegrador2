@@ -283,24 +283,21 @@ def register_medical_event_by_sector(request, id_sector, event):
 
     return redirect('pet:sector_manager')
 #****************************************************************************************************************************************************************
-# Registra um evento médico para o cão selecionado.
+# Cria o formulário para registrar um evento médico.
+
 @login_required(login_url='authors:login', redirect_field_name='next')
 def medical_event_form(request):
 
     form = MedicalEventForm()
 
-    pets = PetsMod.objects.all().order_by('id_pet') #Lista de cães para o formulário de seleção do paciente.
-
-    context = {'form': form, 'pet_id': pets.id, 'pets': pets.name}
+    context = {'form': form}
 
     print(context)
-
-    return redirect('pet:medical_event', context=context)
+    
+    return render(request, 'pets/pages/med_event_reg.html', context=context)
 #****************************************************************************************************************************************************************
 
-
-
-
+# ***********************************************************VIEWS RELACIONADAS A USUÁRIOS************************************************************************
 @login_required(login_url='authors:login', redirect_field_name='next')
 def users(request):
     return render(request, 'pets/pages/users.html')

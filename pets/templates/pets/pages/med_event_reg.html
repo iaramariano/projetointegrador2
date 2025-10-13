@@ -1,0 +1,45 @@
+
+{% extends "global/base.html" %}
+
+{% load static %}
+
+
+
+{% block content %}
+
+  <h2 class="text-center mt-3">REGISTRAR EVENTO MÉDICO</h2>      
+  
+  
+  <form id="med_event" method="POST" enctype="multipart/form-data" action="{% url 'pet:medical_event' %}">
+  {% csrf_token %}
+
+    <div class="row mt-3">
+      
+        <div class = "card user-card me-4 mb-3 rounded shadow">
+            <div class="card-header" style="background-color:#FEF3D2; border-color:#B26E39;">
+                <span class="register-form-title">REGISTRAR EVENTO MÉDICO</span>
+            </div>
+            
+            <div class="card-body">
+                {%include "pets/partials/med_event_pet.html" %}
+            </div>
+        
+        </div>
+    
+    </div>
+    
+    <div class="row mt-3">
+      
+        <div class="text-center">
+        
+            <button type="submit" class="btn btn-primary mb-3 mt-3 me-3 btn-login" id="btn_registrar">REGISTRAR</button>
+            <button type="reset" class="btn btn-primary ms-3 mb-3 mt-3 me-3 btn-login" id="btn_limpar">LIMPAR</button>
+            <a href={% url 'pet:panel' %} role="button" class="btn btn-primary ms-3 me-3 mb-3 mt-3 btn-login" id="btn_voltar">VOLTAR</a>
+        </form>
+        </div>    
+      
+    </div>
+{% endblock %}
+{% block scripts %}
+<!-- <script src= "{% static 'pets/js/pet_register.js' %}"></script> -->
+{% endblock %}
