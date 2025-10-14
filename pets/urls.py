@@ -32,7 +32,8 @@ urlpatterns = [
     path('search_respost', views.petlist,{'filter': True}, name='search_respost'),
 
     #Medical Event URLs
-    path('medical_event', views.medical_event_form, name='medical_event')
+    path('dog_medical_event', views.dog_medical_event_form, name='dog_medical_event'),
+    path('setor_medical_event', views.setor_medical_event_form, name='setor_medical_event')
     
     ]
 

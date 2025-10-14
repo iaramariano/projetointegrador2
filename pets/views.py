@@ -286,7 +286,7 @@ def register_medical_event_by_sector(request, id_sector, event):
 # Cria o formulário para registrar um evento médico.
 
 @login_required(login_url='authors:login', redirect_field_name='next')
-def medical_event_form(request):
+def dog_medical_event_form(request):
 
     form = MedicalEventForm()
 
@@ -294,14 +294,24 @@ def medical_event_form(request):
 
     print(context)
     
-    return render(request, 'pets/pages/med_event_reg.html', context=context)
+    return render(request, 'pets/pages/dog_med_event_reg.html', context=context)
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def setor_medical_event_form(request):
+
+    form = MedicalEventForm()
+
+    context = {'form': form}
+
+    print(context)
+    
+    return render(request, 'pets/pages/setor_med_event_reg.html', context=context)
 #****************************************************************************************************************************************************************
 
 # ***********************************************************VIEWS RELACIONADAS A USUÁRIOS************************************************************************
 @login_required(login_url='authors:login', redirect_field_name='next')
 def users(request):
     return render(request, 'pets/pages/users.html')
-
 
 
 
