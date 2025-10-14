@@ -1,7 +1,7 @@
 <!-- PRIMEIRA LINHA-->
 <div class="row mt-3 g-3 align-items-center">
-    <label for="{{ form.patient.id_for_label }}" class="form-label register-form-title">SETOR</label>
-    {{ form.patient }}
+    <label for="{{ form.patient.id_for_label }}" class="form-label register-form-title">{{sector.sector.label}}</label>
+    {{ sector.sector }}
 </div>
     
 <div class="spacing-row"></div>
@@ -9,14 +9,14 @@
 <!-- SEGUNDA LINHA -->
 <div class="row mt-3 g-3 align-items-center">
     
-    <label for="{{ form.event_date.id_for_label }}" class="form-label register-form-title">DATA DO EVENTO</label>
+    <label for="{{ form.event_date.id_for_label }}" class="form-label register-form-title">{{form.event_date.label}}</label>
     {{ form.event_date }}
 </div>
       
 <div class="spacing-row"></div>
 
 <div class="row mt-3 g-3 align-items-center">
-    <label for="{{ form.event.id_for_label }}" class="form-label register-form-title">DESCREVA O EVENTO MÉDICO</label>
+    <label for="{{ form.event.id_for_label }}" class="form-label register-form-title">{{form.event.label}}</label>
     {{ form.event }}
 </div>
 

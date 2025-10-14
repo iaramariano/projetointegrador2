@@ -10,7 +10,7 @@
   <h2 class="text-center mt-3">REGISTRAR EVENTO MÉDICO</h2>      
   
   
-  <form id="med_event" method="POST" enctype="multipart/form-data" action="{% url 'pet:setor_medical_event' %}">
+  <form id="med_event" method="POST" enctype="multipart/form-data" action="{% url 'pet:sector_medical_event' %}">
   {% csrf_token %}
 
     <div class="row mt-3">
@@ -18,7 +18,7 @@
         <div class = "card user-card me-4 mb-3 rounded shadow">
 
             <div class="card-body">
-                {%include "pets/partials/med_event_setor.html" %}
+                {%include "pets/partials/med_event_sector.html" %}
             </div>
         
         </div>

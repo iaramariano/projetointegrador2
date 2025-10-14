@@ -1,5 +1,8 @@
 from django import forms
 from .models import PetsMod, SectorMod, MedicalEventMod
+from .utils import MEDICAL_EVENTS_SECTOR
+
+# *********************************************FORMULÁRIO PARA REGISTRO DE CÃES*********************************************
 
 class PetsModForm(forms.ModelForm):
     class Meta:
@@ -43,6 +46,9 @@ class PetsModForm(forms.ModelForm):
         breed = self.cleaned_data.get('breed','')
         return breed.capitalize()
 
+# *********************************************FORMULÁRIO PARA REGISTRO DE SETORES*********************************************
+
+
 class SectorModForm(forms.ModelForm):
     class Meta:
         model = SectorMod
@@ -68,3 +74,54 @@ class MedicalEventForm(forms.ModelForm):
     def clean_event(self):
         event = self.cleaned_data.get('event', '')
         return event.capitalize()
+    
+#******************************************FORMULÁRIO PARA CADASTRO DE EVENTO MÉDICO PARA UM PET**********************************************
+
+
+class MedicalEventForm(forms.ModelForm):
+    class Meta:
+        model = MedicalEventMod
+        fields = ['patient','event','event_date','change_status']
+        widgets = {'patient': forms.Select(attrs={'class': 'form-select text-center form-field-md', 'required': 'true'}),
+                    'event': forms.Textarea(attrs={'rows': 3, 'cols': 40, 'class': 'form-control text-center form-field-lg', 'placeholder': 'Descreva o evento médico', 'required': 'true'}),
+                   'event_date': forms.DateInput(attrs={'class': 'form-control text-center form-field-md', 'type': 'date', 'value': '', 'required': 'true'}),
+                   'change_status': forms.CheckboxInput(attrs={'class': 'form-check-input'})
+                   }
+        labels = {'event_date': 'DATA DO EVENTO', 'change_status': 'ALTERAR SITUAÇÃO DO CÃO', 'patient': 'CÃO', 'event': 'EVENTO MÉDICO'}
+    
+    def clean_event(self):
+        event = self.cleaned_data.get('event', '')
+        return event.capitalize()
+    
+#***************************************************FORMULÁRIO PARA ALTERAÇÃO DE STATUS DO PET)****************************************** 
+#******************************************************(AUXILIAR AO DO EVENTO MÉDICO)***************************************************
+
+class NewStatusForm(forms.ModelForm):
+    class Meta:
+        model = PetsMod
+        fields = ['aptitude']
+        widgets = {'aptitude': forms.Select(attrs={'class': 'form-select text-center form-field-md'})}
+        labels = {'aptitude': 'ALTERAR SITUAÇÃO DO CÃO PARA:'}
+
+#******************************************FORMULÁRIO PARA CADASTRO DE EVENTO MÉDICO PARA UM SETOR***************************************
+
+class MedicalEventSectorForm(forms.ModelForm):
+    event = forms.ChoiceField(choices=MEDICAL_EVENTS_SECTOR, label='EVENTO MÉDICO', widget=forms.Select(attrs={'class': 'form-select text-center form-field-md', 'required': 'true'}))
+
+    class Meta:
+        model = MedicalEventMod
+        fields = ['event','event_date']
+        widgets = {
+                   'event_date': forms.DateInput(attrs={'class': 'form-control text-center form-field-md', 'type': 'date', 'value': '', 'required': 'true'})
+                   }
+        labels = {'event_date': 'DATA DO EVENTO'}
+
+#**************************************************FORMULÁRIO PARA SELEÇÃO DE SETOR********************************************************
+#************************************************(AUXILIAR AO DO EVENTO MÉDICO DE SETOR)***************************************************
+
+class SectorSelectForm(forms.ModelForm):
+    class Meta:
+        model = PetsMod
+        fields = ['sector']
+        widgets = {'sector': forms.Select(attrs={'class': 'form-select text-center form-field-md', 'required': 'true'})}
+        labels = {'sector': 'SETOR'}

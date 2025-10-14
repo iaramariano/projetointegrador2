@@ -5,6 +5,8 @@
 from datetime import datetime
 from random import randint
 
+MEDICAL_EVENTS_SECTOR = (('', '--------'), ("VACINAÇÃO", "Vacinação"), ("VERMIFUGAÇÃO", "Vermifugação"))
+
 class Dates: # Cria classes para gerar suporte referente a datas.
     
     def __init__(self):

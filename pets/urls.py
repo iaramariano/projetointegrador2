@@ -33,7 +33,7 @@ urlpatterns = [
 
     #Medical Event URLs
     path('dog_medical_event', views.dog_medical_event_form, name='dog_medical_event'),
-    path('setor_medical_event', views.setor_medical_event_form, name='setor_medical_event')
+    path('sector_medical_event', views.sector_medical_event_form, name='sector_medical_event')
     
     ]
 

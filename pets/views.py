@@ -3,7 +3,7 @@ from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
-from .forms import PetsModForm, SectorModForm, MedicalEventForm
+from .forms import PetsModForm, SectorModForm, MedicalEventForm, NewStatusForm, MedicalEventSectorForm, SectorSelectForm
 from .models import PetsMod, SectorMod, MedicalEventMod
 
 from .services import create_medical_event, create_medical_event_bulk
@@ -290,22 +290,22 @@ def dog_medical_event_form(request):
 
     form = MedicalEventForm()
 
-    context = {'form': form}
+    new_status = NewStatusForm()
 
-    print(context)
+    context = {'form': form, 'new_status': new_status}
     
     return render(request, 'pets/pages/dog_med_event_reg.html', context=context)
 
 @login_required(login_url='authors:login', redirect_field_name='next')
-def setor_medical_event_form(request):
+def sector_medical_event_form(request):
 
-    form = MedicalEventForm()
+    form = MedicalEventSectorForm()
 
-    context = {'form': form}
+    sector = SectorSelectForm()
 
-    print(context)
+    context = {'form': form, 'sector': sector}
     
-    return render(request, 'pets/pages/setor_med_event_reg.html', context=context)
+    return render(request, 'pets/pages/sector_med_event_reg.html', context=context)
 #****************************************************************************************************************************************************************
 
 # ***********************************************************VIEWS RELACIONADAS A USUÁRIOS************************************************************************
