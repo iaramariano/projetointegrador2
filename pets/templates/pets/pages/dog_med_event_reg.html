@@ -29,14 +29,95 @@
       
         <div class="text-center">
         
-            <button type="submit" class="btn btn-primary mb-3 mt-3 me-3 btn-login" id="btn_registrar">REGISTRAR</button>
+            <button type="button"
+                class="btn btn-primary mb-3 mt-3 me-3 btn-login"
+                data-bs-toggle="modal"
+                data-bs-target="#confirmModal">
+                    REGISTRAR
+            </button>
             <button type="reset" class="btn btn-primary ms-3 mb-3 mt-3 me-3 btn-login" id="btn_limpar">LIMPAR</button>
             <a href={% url 'pet:panel' %} role="button" class="btn btn-primary ms-3 me-3 mb-3 mt-3 btn-login" id="btn_voltar">VOLTAR</a>
         </form>
+
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content brand-modal">
+            <div class="brand-modal__wrap">
+                <div class="brand-modal__icon">!</div>
+
+                <h5 class="brand-modal__title">Confirma o registro do evento médico?</h5>
+
+                <pre class="brand-modal__details" id="confirmDetails">
+        Cão: —
+        Data: —
+        Descrição: —
+                </pre>
+
+                <div class="brand-modal__actions">
+                <button type="button" class="btn btn-brand" id="confirmSubmitBtn">CONFIRMAR</button>
+                <button type="button" class="btn btn-muted" data-bs-dismiss="modal">CANCELAR</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+
         </div>    
       
     </div>
 {% endblock %}
 {% block scripts %}
 <!-- <script src= "{% static 'pets/js/pet_register.js' %}"></script> -->
+
+<script>
+  // util: formata YYYY-MM-DD -> DD/MM/YYYY
+  function toBR(dateStr){
+    if(!dateStr) return '—';
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
+    return m ? `${m[3]}/${m[2]}/${m[1]}` : dateStr; // se já vier DD/MM/YYYY, mantém
+  }
+
+  function selectedText(selectEl){
+    if(!selectEl) return '—';
+    if (selectEl.tagName === 'SELECT') {
+      const opt = selectEl.options[selectEl.selectedIndex];
+      return (opt && opt.text.trim()) || '—';
+    }
+    // se for um widget custom (ex.: Select2), tenta value
+    return selectEl.value?.trim() || '—';
+  }
+
+  const detailsBox = document.getElementById('confirmDetails');
+  const confirmBtn  = document.getElementById('confirmSubmitBtn');
+  const form        = document.getElementById('med_event');
+
+  const modalEl = document.getElementById('confirmModal');
+  modalEl.addEventListener('show.bs.modal', function(){
+    const patientEl   = document.getElementById('id_patient');
+    const dateEl      = document.getElementById('id_event_date');
+    const eventEl     = document.getElementById('id_event');
+    const statusEl    = document.getElementById('id_change_status'); // checkbox ou select
+
+    const dogName   = selectedText(patientEl);
+    const dateText  = toBR(dateEl?.value || '');
+    const descText  = (eventEl?.value || '—').trim();
+    const statusTxt = statusEl
+      ? (statusEl.type === 'checkbox'
+          ? (statusEl.checked ? 'Sim' : 'Não')
+          : selectedText(statusEl))
+      : '—';
+
+    detailsBox.textContent =
+        `Cão: ${dogName}
+        Data: ${dateText}
+        Descrição: ${descText}
+        Altera status: ${statusTxt}`;
+        });
+
+        confirmBtn.addEventListener('click', function(){
+            form.submit();
+        });
+</script>
+
+
 {% endblock %}
