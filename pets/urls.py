@@ -33,8 +33,9 @@ urlpatterns = [
 
     #Medical Event URLs
     path('dog_medical_event', views.dog_medical_event_form, name='dog_medical_event'),
-    path('sector_medical_event', views.sector_medical_event_form, name='sector_medical_event')
-    
+    path('sector_medical_event', views.sector_medical_event_form, name='sector_medical_event'),
+    path('dog_event/register', views.medical_event_register, {'level': 'pet'}, name='dog_event_register'),
+    path('sector_event/register', views.medical_event_register, {'level': 'sector'}, name='sector_event_register')
     ]
 
 if settings.DEBUG:

@@ -60,21 +60,7 @@ class SectorModForm(forms.ModelForm):
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
         return name.capitalize()
-    
-class MedicalEventForm(forms.ModelForm):
-    class Meta:
-        model = MedicalEventMod
-        fields = ['patient','event','event_date','change_status']
-        widgets = {'patient': forms.Select(attrs={'class': 'form-select text-center form-field-md', 'placeholder': 'Selecione o cão'}),
-                    'event': forms.Textarea(attrs={'rows': 3, 'cols': 40, 'class': 'form-control text-center form-field-lg', 'placeholder': 'Descreva o evento médico'}),
-                   'event_date': forms.DateInput(attrs={'class': 'form-control text-center form-field-md', 'type': 'date', 'value': ''}),
-                   'change_status': forms.CheckboxInput(attrs={'class': 'form-check-input'})
-                   }
-    
-    def clean_event(self):
-        event = self.cleaned_data.get('event', '')
-        return event.capitalize()
-    
+       
 #******************************************FORMULÁRIO PARA CADASTRO DE EVENTO MÉDICO PARA UM PET**********************************************
 
 
