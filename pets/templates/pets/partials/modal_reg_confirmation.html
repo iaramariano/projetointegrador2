@@ -1,0 +1,135 @@
+<style>
+  /* ===== Modal estilizado (escopo local) ===== */
+  .brand-modal { 
+    background: transparent; 
+    border: none; 
+  }
+
+  .brand-modal__wrap{
+    background:#F7ECCA;            /* creme */
+    border:4px solid #B6733A;      /* caramelo */
+    border-radius:26px;
+    padding:28px 24px 22px;
+    position:relative;
+    box-shadow:0 8px 24px rgba(0,0,0,.18);
+  }
+
+  .brand-modal__icon{
+    position:absolute; 
+    top:-22px; 
+    left:24px;
+    width:44px; 
+    height:44px; 
+    border-radius:50%;
+    border:4px solid #B6733A; 
+    color:#B6733A;
+    display:grid; 
+    place-items:center;
+    background:#F7ECCA; 
+    font-weight:800;
+    line-height:1;
+  }
+
+  .brand-modal__title{ 
+    margin:8px 0 14px; 
+    font-size:1.15rem; 
+    color:#3a2a1c; 
+  }
+
+  .brand-modal__details{ 
+    background:transparent; 
+    border:none; 
+    color:#3a2a1c; 
+    margin:0 0 18px; 
+    white-space:pre-wrap; 
+    font-family:inherit; 
+    font-size:1.1rem;
+  }
+
+  .brand-modal__actions{ 
+    display:flex;
+    justify-content: center;
+    gap:16px; 
+    flex-wrap:wrap; 
+  }
+
+  /* Botões do modal */
+  .btn.btn-brand{
+    background:#B6733A; 
+    color:#fff;
+    border-radius:12px; 
+    padding:10px 18px;
+    font-weight:700; 
+    letter-spacing:.04em; 
+    border:none;
+    box-shadow:0 6px 14px rgba(0,0,0,.18);
+  }
+  .btn.btn-brand:hover{ filter:brightness(.97); color:#fff; }
+
+  .btn.btn-muted{
+    background:#C9C9CF; 
+    color:#fff;
+    border-radius:12px; 
+    padding:10px 18px;
+    font-weight:700; 
+    letter-spacing:.04em; 
+    border:none;
+  }
+  .btn.btn-muted:hover{ filter:brightness(.97); color:#fff; }
+
+  /* Acessibilidade: foco visível */
+  .btn.btn-brand:focus, .btn.btn-muted:focus{
+    outline: 2px solid #533E1A;
+    outline-offset: 2px;
+    box-shadow:none;
+  }
+
+  /* Preferência do usuário por menos animações */
+  @media (prefers-reduced-motion: reduce){
+    .brand-modal__wrap{ transition:none; }
+    .btn.btn-brand, .btn.btn-muted{ transition:none; }
+  }
+
+  /* Responsivo */
+  @media (max-width: 480px){
+    .brand-modal__wrap{ padding:22px 18px 18px; }
+    .brand-modal__title{ font-size:1.05rem; }
+    .brand-modal__details{ font-size:.95rem; }
+  }
+</style>
+
+<div class="row mt-3">
+    
+    <div class="text-center">
+    
+        <button type="button"
+            class="btn btn-primary mb-3 mt-3 me-3 btn-login"
+            data-bs-toggle="modal"
+            data-bs-target="#confirmModal">
+                REGISTRAR
+        </button>
+        <button type="reset" class="btn btn-primary ms-3 mb-3 mt-3 me-3 btn-login" id="btn_limpar">LIMPAR</button>
+        <a href={% url 'pet:panel' %} role="button" class="btn btn-primary ms-3 me-3 mb-3 mt-3 btn-login" id="btn_voltar">VOLTAR</a>
+    </form>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content brand-modal">
+        <div class="brand-modal__wrap">
+            <div class="brand-modal__icon">!</div>
+
+            <h5 class="brand-modal__title">Confirma o registro do evento médico?</h5>
+
+            <pre class="brand-modal__details" id="confirmDetails">
+                -
+            </pre>
+
+            <div class="brand-modal__actions">
+            <button type="button" class="btn btn-brand" id="confirmSubmitBtn">CONFIRMAR</button>
+            <button type="button" class="btn btn-muted" data-bs-dismiss="modal">CANCELAR</button>
+            </div>
+        </div>
+        </div>
+    </div>
+</div> 
+    

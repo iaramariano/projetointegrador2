@@ -24,19 +24,59 @@
         </div>
     
     </div>
-    
-    <div class="row mt-3">
-      
-        <div class="text-center">
-        
-            <button type="submit" class="btn btn-primary mb-3 mt-3 me-3 btn-login" id="btn_registrar">REGISTRAR</button>
-            <button type="reset" class="btn btn-primary ms-3 mb-3 mt-3 me-3 btn-login" id="btn_limpar">LIMPAR</button>
-            <a href={% url 'pet:panel' %} role="button" class="btn btn-primary ms-3 me-3 mb-3 mt-3 btn-login" id="btn_voltar">VOLTAR</a>
-        </form>
-        </div>    
-      
-    </div>
+
+    {% include "pets/partials/modal_reg_confirmation.html" %}  
+
 {% endblock %}
 {% block scripts %}
-<!-- <script src= "{% static 'pets/js/pet_register.js' %}"></script> -->
+
+<script>
+  // helpers locais (ou remova se já usa App.toBR/App.selectedText)
+  function toBR(dateStr){
+    if(!dateStr) return '—';
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
+    return m ? `${m[3]}/${m[2]}/${m[1]}` : dateStr;
+  }
+  function selectedText(el){
+    if(!el) return '—';
+    if ((el.tagName||'').toUpperCase()==='SELECT'){
+      const i = el.selectedIndex;
+      const opt = i >= 0 ? el.options[i] : null;
+      return (opt && (opt.text ?? '').trim()) || '—';
+    }
+    return (el.value || '').trim() || '—';
+  }
+
+  const form        = document.getElementById('med_event');
+  const modalEl     = document.getElementById('confirmModal');
+  const detailsBox  = document.getElementById('confirmDetails');
+  const confirmBtn  = document.getElementById('confirmSubmitBtn');
+
+  if (modalEl && detailsBox && confirmBtn && form){
+    modalEl.addEventListener('show.bs.modal', function () {
+      // tenta pelos ids padrão do Django; se não achar, tenta por name
+      const sectorEl = document.getElementById('id_sector') 
+                    || document.querySelector('[name="sector"]')
+                    || document.querySelector('[name="sector.sector"]');
+      const dateEl   = document.getElementById('id_event_date')
+                    || document.querySelector('[name="event_date"]');
+      const eventEl  = document.getElementById('id_event')
+                    || document.querySelector('[name="event"]');
+
+      const sectorTxt = selectedText(sectorEl);
+      const dateTxt   = toBR(dateEl?.value || '');
+      const descTxt   = (eventEl?.value || '—').trim();
+
+      detailsBox.textContent =
+        `Setor: ${sectorTxt}
+        Data: ${dateTxt}
+        Descrição: ${descTxt}`;
+            });
+
+            confirmBtn.addEventListener('click', function(){
+            form.submit();
+            });
+        }
+</script>
+
 {% endblock %}

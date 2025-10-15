@@ -65,6 +65,17 @@ class SectorModForm(forms.ModelForm):
 
 
 class MedicalEventForm(forms.ModelForm):
+    event = forms.CharField(
+        max_length=200,
+        widget=forms.Textarea(attrs={
+            "rows": 3,
+            "cols": 40,
+            "class": "form-control text-center form-field-lg",
+            "placeholder": "Descreva o evento médico",
+            "maxlength": 20,   # também manda pro HTML
+        })
+    )
+
     class Meta:
         model = MedicalEventMod
         fields = ['patient','event','event_date','change_status']
