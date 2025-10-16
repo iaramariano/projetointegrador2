@@ -31,80 +31,101 @@
 
 {% endblock %}
 {% block scripts %}
-
 <script>
-    function toBR(dateStr){
-        if(!dateStr) return '—';
-        const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
-        return m ? `${m[3]}/${m[2]}/${m[1]}` : dateStr;
-    };
+  function toBR(dateStr){
+    if(!dateStr) return '—';
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
+    return m ? `${m[3]}/${m[2]}/${m[1]}` : dateStr;
+  }
+  function selectedText(el){
+    if(!el) return '—';
+    const tag = (el.tagName || '').toUpperCase();
+    if (tag === 'SELECT') {
+      const i = el.selectedIndex;
+      const opt = i >= 0 ? el.options[i] : null;
+      return (opt && (opt.text ?? '').trim()) || '—';
+    }
+    return (el.value || '').trim() || '—';
+  }
 
-    function selectedText(el){
-        if(!el) return '—';
-        const tag = (el.tagName || '').toUpperCase();
-        if (tag === 'SELECT') {
-            const i = el.selectedIndex;
-            const opt = i >= 0 ? el.options[i] : null;
-            return (opt && (opt.text ?? '').trim()) || '—';
-        }
-        return (el.value || '').trim() || '—';
-    };
+  const form        = document.getElementById('med_event');
+  const modalEl     = document.getElementById('confirmModal');
+  const detailsBox  = document.getElementById('confirmDetails');
+  const confirmBtn  = document.getElementById('confirmSubmitBtn');
 
+  function getNewStatusEl(){
+    // tenta por ids e names comuns
+    return document.getElementById('id_new_status')
+        || document.getElementById('id_aptitude')              // nome típico no model
+        || document.querySelector('[name="new_status"]')
+        || document.querySelector('[name="aptitude"]')
+        || document.querySelector('#aptitudeRow select');       // dentro da row
+  }
 
-    const detailsBox = document.getElementById('confirmDetails');
-    const confirmBtn  = document.getElementById('confirmSubmitBtn');
-    const form        = document.getElementById('med_event');
+  function fillModal(){
+    const patientEl   = document.getElementById('id_patient');
+    const dateEl      = document.getElementById('id_event_date');
+    const eventEl     = document.getElementById('id_event');
+    const changeEl    = document.getElementById('id_change_status'); // checkbox
+    const newStatusEl = getNewStatusEl();                             // select
 
-    const modalEl = document.getElementById('confirmModal');
-    modalEl.addEventListener('show.bs.modal', function(){
-        const patientEl   = document.getElementById('id_patient');
-        const dateEl      = document.getElementById('id_event_date');
-        const eventEl     = document.getElementById('id_event');
-        const statusEl    = document.getElementById('id_change_status'); // checkbox ou select
-        const newStatusEl = document.getElementById('id_new_status'); // select
+    const dogName   = selectedText(patientEl);
+    const dateText  = toBR(dateEl?.value || '');
+    const descText  = (eventEl?.value || '—').trim();
+    const changeYes = !!(changeEl && changeEl.checked);
 
-        const dogName   = selectedText(patientEl);
-        const dateText  = toBR(dateEl?.value || '');
-        const descText  = (eventEl?.value || '—').trim();
-        const statusTxt = statusEl
-            ? (statusEl.type === 'checkbox'
-                ? (statusEl.checked ? 'Sim' : 'Não')
-                : App.selectedText(statusEl))
-            : '—';
+    const newStatusLine =
+      (changeYes && newStatusEl && !newStatusEl.disabled && (newStatusEl.value || '').trim())
+        ? `\nNova situação: ${selectedText(newStatusEl)}`
+        : '';
 
-        detailsBox.textContent =
-            `Cão: ${dogName}
-            Data: ${dateText}
-            Descrição: ${descText}
-            Altera status: ${statusTxt}
-            ${statusTxt == 'Sim' ? 'Nova situação: ' : ''}`;
-            });
+    detailsBox.textContent =
+        `Cão: ${dogName}
+        Data: ${dateText}
+        Descrição: ${descText}
+        Altera status: ${changeYes ? 'Sim' : 'Não'}${newStatusLine}`;
+  }
 
-            confirmBtn.addEventListener('click', function(){
-                form.submit();
-            });
-</script>
+  if (modalEl) {
+    modalEl.addEventListener('show.bs.modal', function(e){
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        form.reportValidity();
+        return;
+      }
+      fillModal();
+    });
+  }
 
-<script>
+  if (confirmBtn) {
+    confirmBtn.addEventListener('click', function(){
+      if (!form.checkValidity()) {
+        const inst = bootstrap.Modal.getInstance(modalEl);
+        inst?.hide();
+        form.reportValidity();
+        return;
+      }
+      form.requestSubmit();
+    });
+  }
+
+  // opcional: garantir required do novo status quando a caixa estiver marcada
   (function(){
-    const changeEl   = document.getElementById('id_change_status');
+    const changeEl    = document.getElementById('id_change_status');
     const aptitudeRow = document.getElementById('aptitudeRow');
-
-    if (!changeEl || !aptitudeRow) return;
+    const newStatusEl = getNewStatusEl();
+    if (!changeEl || !aptitudeRow || !newStatusEl) return;
 
     function setEnabled(enabled){
       aptitudeRow.classList.toggle('is-disabled', !enabled);
       aptitudeRow.querySelectorAll('input, select, textarea, button').forEach(el => {
         el.disabled = !enabled;
       });
+      if (enabled) newStatusEl.setAttribute('required','true');
+      else newStatusEl.removeAttribute('required');
     }
-
-    // estado inicial (caso venha preenchido do servidor)
     setEnabled(!!changeEl.checked);
-
-    // ao trocar o checkbox/radio
     changeEl.addEventListener('change', () => setEnabled(!!changeEl.checked));
   })();
 </script>
-
 {% endblock %}

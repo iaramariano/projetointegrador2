@@ -1,4 +1,5 @@
 from django import forms
+from django.utils import timezone
 from .models import PetsMod, SectorMod, MedicalEventMod
 from .utils import MEDICAL_EVENTS_SECTOR
 
@@ -66,13 +67,15 @@ class SectorModForm(forms.ModelForm):
 
 class MedicalEventForm(forms.ModelForm):
     event = forms.CharField(
+        min_length=5,
         max_length=200,
         widget=forms.Textarea(attrs={
             "rows": 3,
             "cols": 40,
             "class": "form-control text-center form-field-lg",
             "placeholder": "Descreva o evento médico",
-            "maxlength": 20,   # também manda pro HTML
+            "minlength": 5,
+            "maxlength": 200,
         })
     )
 
@@ -86,9 +89,15 @@ class MedicalEventForm(forms.ModelForm):
                    }
         labels = {'event_date': 'DATA DO EVENTO', 'change_status': 'ALTERAR SITUAÇÃO DO CÃO', 'patient': 'CÃO', 'event': 'EVENTO MÉDICO'}
     
-    def clean_event(self):
-        event = self.cleaned_data.get('event', '')
-        return event.capitalize()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['event_date'].widget.attrs['max'] = timezone.localdate().isoformat()
+
+    def clean_event_date(self):
+        d = self.cleaned_data.get('event_date')
+        if d and d > timezone.localdate():
+            raise forms.ValidationError("Data no futuro não é permitida.")
+        return d
     
 #***************************************************FORMULÁRIO PARA ALTERAÇÃO DE STATUS DO PET)****************************************** 
 #******************************************************(AUXILIAR AO DO EVENTO MÉDICO)***************************************************
@@ -112,6 +121,16 @@ class MedicalEventSectorForm(forms.ModelForm):
                    'event_date': forms.DateInput(attrs={'class': 'form-control text-center form-field-md', 'type': 'date', 'value': '', 'required': 'true'})
                    }
         labels = {'event_date': 'DATA DO EVENTO'}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['event_date'].widget.attrs['max'] = timezone.localdate().isoformat()
+
+    def clean_event_date(self):
+        d = self.cleaned_data.get('event_date')
+        if d and d > timezone.localdate():
+            raise forms.ValidationError("Data no futuro não é permitida.")
+        return d
 
 #**************************************************FORMULÁRIO PARA SELEÇÃO DE SETOR********************************************************
 #************************************************(AUXILIAR AO DO EVENTO MÉDICO DE SETOR)***************************************************

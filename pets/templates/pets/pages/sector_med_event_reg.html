@@ -1,37 +1,26 @@
-
 {% extends "global/base.html" %}
-
 {% load static %}
 
-
-
 {% block content %}
+  <h2 class="text-center mt-3">REGISTRAR EVENTO MÉDICO</h2>
 
-  <h2 class="text-center mt-3">REGISTRAR EVENTO MÉDICO</h2>      
-  
-  
   <form id="med_event" method="POST" enctype="multipart/form-data" action="{% url 'pet:sector_event_register' %}">
-  {% csrf_token %}
+    {% csrf_token %}
 
     <div class="row mt-3">
-      
-        <div class = "card user-card me-4 mb-3 rounded shadow">
-
-            <div class="card-body">
-                {%include "pets/partials/med_event_sector.html" %}
-            </div>
-        
+      <div class="card user-card me-4 mb-3 rounded shadow">
+        <div class="card-body">
+          {% include "pets/partials/med_event_sector.html" %}
         </div>
-    
+      </div>
     </div>
+  </form>
 
-    {% include "pets/partials/modal_reg_confirmation.html" %}  
-
+  {% include "pets/partials/modal_reg_confirmation.html" %}
 {% endblock %}
-{% block scripts %}
 
+{% block scripts %}
 <script>
-  // helpers locais (ou remova se já usa App.toBR/App.selectedText)
   function toBR(dateStr){
     if(!dateStr) return '—';
     const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
@@ -39,7 +28,8 @@
   }
   function selectedText(el){
     if(!el) return '—';
-    if ((el.tagName||'').toUpperCase()==='SELECT'){
+    const tag = (el.tagName || '').toUpperCase();
+    if (tag === 'SELECT') {
       const i = el.selectedIndex;
       const opt = i >= 0 ? el.options[i] : null;
       return (opt && (opt.text ?? '').trim()) || '—';
@@ -47,36 +37,50 @@
     return (el.value || '').trim() || '—';
   }
 
-  const form        = document.getElementById('med_event');
-  const modalEl     = document.getElementById('confirmModal');
-  const detailsBox  = document.getElementById('confirmDetails');
-  const confirmBtn  = document.getElementById('confirmSubmitBtn');
+  const form       = document.getElementById('med_event');
+  const modalEl    = document.getElementById('confirmModal');
+  const detailsBox = document.getElementById('confirmDetails');
+  const confirmBtn = document.getElementById('confirmSubmitBtn');
 
-  if (modalEl && detailsBox && confirmBtn && form){
-    modalEl.addEventListener('show.bs.modal', function () {
-      // tenta pelos ids padrão do Django; se não achar, tenta por name
-      const sectorEl = document.getElementById('id_sector') 
-                    || document.querySelector('[name="sector"]')
-                    || document.querySelector('[name="sector.sector"]');
-      const dateEl   = document.getElementById('id_event_date')
-                    || document.querySelector('[name="event_date"]');
-      const eventEl  = document.getElementById('id_event')
-                    || document.querySelector('[name="event"]');
+  function fillModal(){
+    const sectorEl = document.getElementById('id_sector') 
+                  || document.querySelector('[name="sector"]');
+    const dateEl   = document.getElementById('id_event_date')
+                  || document.querySelector('[name="event_date"]');
+    const eventEl  = document.getElementById('id_event')
+                  || document.querySelector('[name="event"]');
 
-      const sectorTxt = selectedText(sectorEl);
-      const dateTxt   = toBR(dateEl?.value || '');
-      const descTxt   = (eventEl?.value || '—').trim();
+    const sectorTxt = selectedText(sectorEl);
+    const dateTxt   = toBR(dateEl?.value || '');
+    const descTxt   = (eventEl?.value || '—').trim();
 
-      detailsBox.textContent =
+    detailsBox.textContent =
         `Setor: ${sectorTxt}
         Data: ${dateTxt}
         Descrição: ${descTxt}`;
-            });
+  }
 
-            confirmBtn.addEventListener('click', function(){
-            form.submit();
-            });
-        }
+  if (modalEl) {
+    modalEl.addEventListener('show.bs.modal', function(e){
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        form.reportValidity();
+        return;
+      }
+      fillModal();
+    });
+  }
+
+  if (confirmBtn) {
+    confirmBtn.addEventListener('click', function(){
+      if (!form.checkValidity()) {
+        const inst = bootstrap.Modal.getInstance(modalEl);
+        inst?.hide();
+        form.reportValidity();
+        return;
+      }
+      form.requestSubmit();
+    });
+  }
 </script>
-
 {% endblock %}
