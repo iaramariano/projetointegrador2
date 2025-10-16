@@ -67,4 +67,4 @@ class MedicalEventMod(models.Model):
     change_status = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Evento {self.event} para o pet {self.id_patient} em {self.event_date}"
+        return f"{self.event} registrado para o pet {self.patient} em {self.event_date}"

@@ -83,7 +83,6 @@ class MedicalEventForm(forms.ModelForm):
         model = MedicalEventMod
         fields = ['patient','event','event_date','change_status']
         widgets = {'patient': forms.Select(attrs={'class': 'form-select text-center form-field-md', 'required': 'true'}),
-                    'event': forms.Textarea(attrs={'rows': 3, 'cols': 40, 'class': 'form-control text-center form-field-lg', 'placeholder': 'Descreva o evento médico', 'required': 'true'}),
                    'event_date': forms.DateInput(attrs={'class': 'form-control text-center form-field-md', 'type': 'date', 'value': '', 'required': 'true'}),
                    'change_status': forms.CheckboxInput(attrs={'class': 'form-check-input'})
                    }

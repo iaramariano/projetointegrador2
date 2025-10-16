@@ -26,6 +26,8 @@ RUN pip install -r requirements.txt
 # 6. Copiar o restante do código do projeto para o diretório de trabalho
 COPY . /app/
 
+RUN chmod +x /app/*.sh
+
 # 7. Expor a porta que a aplicação vai rodar (opcional, boa prática)
 EXPOSE 8000
 
