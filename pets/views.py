@@ -391,6 +391,21 @@ def medical_event_register(request, level=None):
     else:
         messages.error(request, "Algo deu errado! Por favor, repita a operação.")
         return redirect('pet:panel')        
+
+@login_required(login_url='authors:login', redirect_field_name='next')
+def dog_med_event_view(request, id_pet):
+
+    pet = get_object_or_404(PetsMod, id_pet=id_pet)
+    form = PetsModForm(instance=pet)
+    events = (MedicalEventMod.objects
+          .filter(patient=pet)
+          .order_by('-event_date', '-id_event'))   # ou '-pk'
+    
+    context = {'form': form, 'months': dates.months, 'years': dates.year_list(), 
+               'pet': pet, 'bg_color': bg_colors.random(), # Passa a cor de fundo aleatória para o card do pet.
+               'events': events}
+
+    return render (request, 'pets/pages/dog_med_event_view.html', context=context)
     
 # ***********************************************************VIEWS RELACIONADAS A USUÁRIOS************************************************************************
 @login_required(login_url='authors:login', redirect_field_name='next')
