@@ -2,29 +2,64 @@
 {% load static %}
 
 {% block content %}
-  <h2 class="text-center mt-3">VISUALIZAR EVENTOS MÉDICOS</h2>
+
+  <style>
+    .event-list-card { border-radius: 1rem; border: 1px solid var(--bs-border-color); }
+    .event-list-header {
+      background: var(--bs-body-bg);
+      border-bottom: 1px solid var(--bs-border-color);
+      padding: .75rem 1rem;
+    }
+
+    .event-list .event-item { padding: .75rem 1rem; transition: background-color .12s ease; }
+    .event-list .event-item:hover {
+      background: color-mix(in srgb, var(--bs-primary) 6%, var(--bs-body-bg));
+    }
+    .event-list .event-item:nth-child(odd) {
+      background: color-mix(in srgb, var(--bs-body-bg) 92%, white);
+    }
+
+    .event-date {
+      min-width: 110px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: .2px;
+    }
+    .event-desc { line-height: 1.35; }
+
+    @media (prefers-color-scheme: dark) {
+      .event-list .event-item:nth-child(odd) {
+        background: color-mix(in srgb, var(--bs-body-bg) 96%, black);
+      }
+    }
+  </style>
+
+  <h2 class="text-center mt-3">VISUALIZAR EVENTOS MÉDICOS REGISTRADOS</h2>
 
   <div class="row mt-3 align-items-center justify-content-center">
     <div class="col-md-4 .offset-md-4 col-12 p-0">
-      {# usa o objeto pet direto, sem form #}
       {% include "pets/partials/petcard.html" with pet=pet %}
     </div>
   </div>
 
+  <div class="spacing-row"></div>
+  <div class="spacing-row"></div>
+
   <div class="container mt-4">
     {% if events %}
-      <ul class="list-group">
-        {% for ev in events %}
-          <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div>
-              <div class="fw-bold">{{ ev.event_date|date:"d/m/Y" }}</div>
-              {{ ev.event }}
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
+      <div class="card shadow-sm event-list-card">
+
+        <ul class="list-group list-group-flush event-list">
+          {% for ev in events %}
+            <li class="list-group-item event-item d-flex align-items-start gap-3">
+              <span class="event-date fw-semibold">{{ ev.event_date|date:"d/m/Y" }}</span>
+              <span class="event-desc">{{ ev.event }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
     {% else %}
       <p class="text-center text-muted mt-3">Sem eventos cadastrados para este cão.</p>
     {% endif %}
   </div>
+
 {% endblock %}

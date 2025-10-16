@@ -52,6 +52,21 @@
         <div class="card-body">
           {%include "pets/partials/treatment_dog_card.html" %}
         </div>
+
+        <div class="row mt-3">
+          <div class="text-center">
+            {% if form.instance and form.instance.id_pet %}
+              <a href="{% url 'pet:dog_med_event_view' form.instance.id_pet %}"
+                role="button"
+                class="btn btn-primary ms-3 me-3 mb-3 mt-3 btn-login"
+                id="btn_eventos">
+                VISUALIZAR EVENTOS MÉDICOS REGISTRADOS
+              </a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="spacing-row"></div>
+        <div class="spacing-row"></div>
       
       </div>
     </div>
@@ -78,6 +93,7 @@
         {% if form.instance and form.instance.id_pet %} <form method="POST" action="{% url 'pet:pet_delete' form.instance.id_pet %}"> {% csrf_token %} <button type="submit" class="btn btn-primary ms-3 me-3 mb-3 mt-3 btn-login btn-danger" id="btn_excluir">EXCLUIR</button></form>{% endif%}
       </div>
     </div>
+  </form>
 {% endblock %}
 {% block scripts %}
 <script src= "{% static 'pets/js/pet_register.js' %}"></script>
