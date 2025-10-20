@@ -79,11 +79,14 @@ class MedicalEventForm(forms.ModelForm):
         })
     )
 
+    patients_list = PetsMod.objects.all().order_by('name')
+    patient = forms.ModelChoiceField(queryset=patients_list, label='CÃO', 
+                                     widget=forms.Select(attrs={'class': 'form-select text-center form-field-md', 'required': 'true'}))
+
     class Meta:
         model = MedicalEventMod
         fields = ['patient','event','event_date','change_status']
-        widgets = {'patient': forms.Select(attrs={'class': 'form-select text-center form-field-md', 'required': 'true'}),
-                   'event_date': forms.DateInput(attrs={'class': 'form-control text-center form-field-md', 'type': 'date', 'value': '', 'required': 'true'}),
+        widgets = {'event_date': forms.DateInput(attrs={'class': 'form-control text-center form-field-md', 'type': 'date', 'value': '', 'required': 'true'}),
                    'change_status': forms.CheckboxInput(attrs={'class': 'form-check-input'})
                    }
         labels = {'event_date': 'DATA DO EVENTO', 'change_status': 'ALTERAR SITUAÇÃO DO CÃO', 'patient': 'CÃO', 'event': 'EVENTO MÉDICO'}
@@ -137,6 +140,8 @@ class MedicalEventSectorForm(forms.ModelForm):
 class SectorSelectForm(forms.ModelForm):
     class Meta:
         model = PetsMod
+        
+        sector_list = SectorMod.objects.all().order_by('name')
+        sector = forms.ModelChoiceField(queryset=sector_list, label='SETOR', 
+                                     widget=forms.Select(attrs={'class': 'form-select text-center form-field-md', 'required': 'true'}))
         fields = ['sector']
-        widgets = {'sector': forms.Select(attrs={'class': 'form-select text-center form-field-md', 'required': 'true'})}
-        labels = {'sector': 'SETOR'}

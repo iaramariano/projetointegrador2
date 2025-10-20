@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import PetsModForm, SectorModForm, MedicalEventForm, NewStatusForm, MedicalEventSectorForm, SectorSelectForm
 from .models import PetsMod, SectorMod, MedicalEventMod
 
-from .services import create_medical_event_bulk, update_status_medical_event, register_medical_event_pet
+from .services import register_medical_event_pet, register_medical_event_sector
 
 # Classes utilitárias
 from .utils import Dates, BgCardColor
@@ -308,6 +308,7 @@ def medical_event_register(request, level=None):
        
 
         if request.method == 'POST':
+            
             med_event_form = MedicalEventSectorForm(request.POST or None) 
             sector_form = SectorSelectForm(request.POST or None)
         

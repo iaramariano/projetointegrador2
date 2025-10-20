@@ -52,12 +52,15 @@ def register_medical_event_pet(MedicalEventForm, NewStatusForm):
         medical_event.save()
         
 
-        if change_status is True and NewStatusForm.is_valid():
-            new_status = NewStatusForm.cleaned_data.get('aptitude')
-            update_status_medical_event(patient, new_status)
+        if change_status is True:
+            
+            if NewStatusForm.is_valid():
+                
+                new_status = NewStatusForm.cleaned_data.get('aptitude')
+                update_status_medical_event(patient, new_status)
 
-        else:
-            raise ValueError("Ocorreu um erro na seleção do status.")
+            else:        
+                raise ValueError("Ocorreu um erro na seleção do status.")
         
         sucess_message = f"Evento médico '{event}' registrado com sucesso para {patient.name}."
         return sucess_message        
