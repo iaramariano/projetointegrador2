@@ -1,0 +1,9 @@
+<form method="post" class="row gy-2">
+  {% csrf_token %}
+  <div class="col-12 col-md-4">{{ form.name }}</div>
+  <div class="col-12 col-md-5">{{ form.email }}</div>
+  <div class="col-12">{{ form.consent }}</div>
+  <div class="col-12 col-md-3">
+    <button class="btn btn-primary w-100">Quero receber novidades</button>
+  </div>
+</form>

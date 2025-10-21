@@ -23,6 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY')
 
+MAILERLITE_API_KEY = config("MAILERLITE_API_KEY", default="", cast=str)
+MAILERLITE_NEWSLETTER_GROUP_ID = config("MAILERLITE_NEWSLETTER_GROUP_ID", default=None)
+MAILERLITE_TIMEOUT = config("MAILERLITE_TIMEOUT", default=6.0, cast=float)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
@@ -48,6 +52,7 @@ INSTALLED_APPS = [
     'pets',
     'authors',
     'storages',
+    'newsletter',
 ]
 
 MIDDLEWARE = [

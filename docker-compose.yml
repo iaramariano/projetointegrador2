@@ -19,6 +19,9 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
+      - MAILERLITE_API_KEY=${MAILERLITE_API_KEY}
+      - MAILERLITE_NEWSLETTER_GROUP_ID=${MAILERLITE_NEWSLETTER_GROUP_ID}
+      - MAILERLITE_TIMEOUT=${MAILERLITE_TIMEOUT}
     depends_on:
       - db # Garante que o contêiner do DB suba antes da aplicação
 
