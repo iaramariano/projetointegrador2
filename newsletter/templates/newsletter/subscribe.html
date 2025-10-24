@@ -1,4 +1,6 @@
-<form method="post" class="row g-3 justify-content-center align-items-end">
+<form method="post"
+  class="row g-3 justify-content-center align-items-end"
+  action="{% url 'newsletter:subscribe' %}">
   {% csrf_token %}
 
   <div class="form-data col-12 col-md-4">
