@@ -1,0 +1,20 @@
+{% load newsletter_tags %}
+
+<div class="card shadow-sm border-0 my-4">
+  <div class="card-header border-0 py-3 text-white"
+       style="background:#B6733A;">
+    <h2 class="h4 m-0 text-uppercase fw-bold"
+        style="letter-spacing:.06em;">
+      Receba novidades do Lar Temporário Cãotinho
+    </h2>
+  </div>
+
+  <div class="card-body" style="background:#FFF3D6;">
+        <p class="mb-3" style="color:#834E27;">
+            Assine gratuitamente nossa newsletter e fique por dentro de histórias de adoções, bastidores do lar temporário e saiba de antemão sobre campanhas de apoio!
+        </p></br>
+        <div class="mx-auto" style="max-width: 520px;">
+        {% newsletter_subscribe %}
+        </div>
+  </div>
+</div>

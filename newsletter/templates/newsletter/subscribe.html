@@ -1,9 +1,42 @@
-<form method="post" class="row gy-2">
+<form method="post" class="row g-3 justify-content-center align-items-end">
   {% csrf_token %}
-  <div class="col-12 col-md-4">{{ form.name }}</div>
-  <div class="col-12 col-md-5">{{ form.email }}</div>
-  <div class="col-12">{{ form.consent }}</div>
-  <div class="col-12 col-md-3">
-    <button class="btn btn-primary w-100">Quero receber novidades</button>
+
+  <div class="form-data col-12 col-md-4">
+    {{ form.name }}
   </div>
+
+  <div class="form-data col-12 col-md-4">
+    {{ form.email }}
+  </div>
+
+  <div class="col-12 col-md-8">
+    <div class="form-check d-flex align-items-start gap-2 mb-0">
+      {{ form.consent }}
+      <label class="form-check-label lh-sm" for="{{ form.consent.id_for_label }}">
+        {{ form.consent.label }}
+      </label>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-auto d-grid">
+    <button type="submit"
+            class="btn btn-lg fw-bold text-white px-4 py-2 fs-3"
+            style="background:#B6733A; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
+      ME INSCREVER NA NEWSLETTER
+    </button>
+  </div>
+  <separator class="my-4"></separator>
 </form>
+
+<style>
+  .form-data {
+    transform: scale(1.05);
+  }
+
+  .form-check-input {
+    transform: scale(1.15);
+    margin-top: .2rem;
+  }
+
+  .form-check-label { max-width: 40ch; }
+</style>
