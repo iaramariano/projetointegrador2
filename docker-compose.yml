@@ -14,11 +14,17 @@ services:
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - DEBUG=${DEBUG}
+      - DB_LOCAL=${DB_LOCAL}
       - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
+      - DBLOCAL_NAME=${DBLOCAL_NAME}
+      - DBLOCAL_USER=${DBLOCAL_USER}
+      - DBLOCAL_PASSWORD=${DBLOCAL_PASSWORD}
+      - DBLOCAL_HOST=${DBLOCAL_HOST}
+      - DBLOCAL_PORT=${DBLOCAL_PORT}
       - MAILERLITE_API_KEY=${MAILERLITE_API_KEY}
       - MAILERLITE_NEWSLETTER_GROUP_ID=${MAILERLITE_NEWSLETTER_GROUP_ID}
       - MAILERLITE_TIMEOUT=${MAILERLITE_TIMEOUT}
@@ -32,9 +38,9 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql # Volume para persistir os dados do banco
     environment:
-      - MYSQL_DATABASE=${DB_NAME}
-      - MYSQL_USER=${DB_USER}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DBLOCAL_NAME}
+      - MYSQL_USER=${DBLOCAL_USER}
+      - MYSQL_PASSWORD=${DBLOCAL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} # Senha de root do MySQL
     ports:
       - "3306:3306" # Expor a porta do MySQL para sua máquina (útil para debugar com DBeaver, etc)

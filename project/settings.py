@@ -92,6 +92,8 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+DB_LOCAL = config('DB_LOCAL', default=False, cast=bool)
+
 if config('DATABASE_URL', default=None):
     # Se estiver no Render ou outro ambiente de produção, usa a DATABASE_URL
     DATABASES = {
@@ -103,15 +105,27 @@ if config('DATABASE_URL', default=None):
     }
     # Adiciona a configuração de engine para psycopg2, se necessário no Render
     DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+elif DB_LOCAL:
+    # Usa o banco local definido em DBLOCAL_* no .env
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': config('DBLOCAL_NAME'),
+            'USER': config('DBLOCAL_USER'),
+            'PASSWORD': config('DBLOCAL_PASSWORD'),
+            'HOST': config('DBLOCAL_HOST'),
+            'PORT': config('DBLOCAL_PORT'),
+        }
+    }
 else:
-    # Senão, monta a configuração para o Docker local, lendo do arquivo .env
+    # Senão, monta a configuração externa, lendo do arquivo .env
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': config('DB_NAME'),
             'USER': config('DB_USER'),
             'PASSWORD': config('DB_PASSWORD'),
-            'HOST': config('DB_HOST'),  # No .env, este valor deve ser 'db'
+            'HOST': config('DB_HOST'),
             'PORT': config('DB_PORT'),
         }
     }
